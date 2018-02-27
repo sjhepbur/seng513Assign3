@@ -1,5 +1,6 @@
-var app = require('express')();
-var http = require('http').Server(app);
+var express = require('express');
+var app = express();
+var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
@@ -10,9 +11,11 @@ var chatMessages = [];
 
 var chgUser = "/nick"
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+http.listen(port, function(){
+  console.log('listening on *:', port);
 });
+
+app.use(express.static(__dirname + '/public'));
 
 function checkTime(i) {
   if (i < 10) {
@@ -47,7 +50,7 @@ function logMessage(message){
 
 function displayLoggedMsg(usrID){
   for (let i = 0; i < chatMessages.length; i++){
-    io.sockets.connected[usrID].emit('chat message', chatMessages[i]);
+    io.sockets.connected[usrID].emit('chat', chatMessages[i]);
   }
 }
 
@@ -55,10 +58,10 @@ function changeUserName(oldName, newName){
   var index = users.indexOf(oldName);
   if (checkUserExists(newName)){
     userID = userIDs[index];
-    io.sockets.connected[usrID].emit('chat message', "Sorry, " + newName + " is already a name on the server");
+    io.sockets.connected[usrID].emit('chat', "Sorry, " + newName + " is already a name on the server");
   } else{
     users[index] = newName;
-    io.emit('chat message', user + " changed their name to " + newName);
+    io.emit('chat', user + " changed their name to " + newName);
   }
 }
 
@@ -68,11 +71,11 @@ io.on('connection', function(socket){
   usrID = socket.id;
   userIDs.push(usrID);
 
-  io.sockets.connected[usrID].emit('chat message', "You are " + newName);
+  io.sockets.connected[usrID].emit('chat', "You are " + newName);
 
   displayLoggedMsg(usrID);
 
-  socket.on('chat message', function(msg){
+  socket.on('chat', function(msg){
     var time = new Date;
     var h = time.getHours();
     var m = time.getMinutes();
@@ -94,7 +97,7 @@ io.on('connection', function(socket){
       changeUserName(user, newName);
     } else{
       logMessage(fullMessage);
-      io.emit('chat message', fullMessage);
+      io.emit('chat', fullMessage);
     }
 
     console.log('message: ' + fullMessage);
@@ -103,7 +106,7 @@ io.on('connection', function(socket){
     socID = socket.id;
     index = userIDs.indexOf(socID);
     userDis = users[index];
-    io.emit('chat message', "User " + userDis + " has disconnected");
+    io.emit('chat', "User " + userDis + " has disconnected");
 
     users.splice(index, 1);
     userIDs.splice(index, 1);
@@ -111,8 +114,4 @@ io.on('connection', function(socket){
 
     console.log('user ' + userDis + ' disconnected')
   });
-});
-
-http.listen(port, function(){
-  console.log('listening on *:' + port);
 });

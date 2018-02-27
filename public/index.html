@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script
+       src="https://code.jquery.com/jquery-3.1.1.min.js"
+       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+       crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/client.js"></script> -->
+    <div id="container">
+      <div id="user_info">
+        <p>Username</p>
+      </div>
+      <div id="list_info">
+        <p>List of Users</p>
+      </div>
+    
+      <div id="chat_box">
+        <div id="chat_content">
+          <ul id="messages"></ul>
+        </div>
+      </div>
+      <div id="users_box">
+        <p>User list here</p>
+      </div>
+      
+      <div id="chat">
+        <form action="">
+          <input id="m" autocomplete="off" /><button>Send</button>
+        </form>
+        <script
+          src="https://code.jquery.com/jquery-3.1.1.min.js"
+          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+          crossorigin="anonymous"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/client.js"></script>
+      </div>
+    </div>
+  </body>
+</html>
