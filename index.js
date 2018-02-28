@@ -7,9 +7,11 @@ var port = process.env.PORT || 3000;
 var numUsers = 0;
 var users = [];
 var userIDs = [];
+var userColours = [];
 var chatMessages = [];
 
-var chgUser = "/nick"
+var chgUser = "/nick";
+var chgColour = "/nickcolor";
 
 http.listen(port, function(){
   console.log('listening on *:', port);
@@ -22,6 +24,19 @@ function checkTime(i) {
     i = "0" + i;
   }
   return i;
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function isValidColor(colour){
+  return (typeof colour === "string") && colour.length === 6  && ! isNaN( parseInt(colour, 16) );
 }
 
 function newUser(){
@@ -58,10 +73,23 @@ function changeUserName(oldName, newName){
   var index = users.indexOf(oldName);
   if (checkUserExists(newName)){
     userID = userIDs[index];
-    io.sockets.connected[usrID].emit('chat', "Sorry, " + newName + " is already a name on the server");
+    io.sockets.connected[usrID].emit('chat', "<p>Sorry, " + newName + " is already a name on the server</p>");
   } else{
     users[index] = newName;
-    io.emit('chat', user + " changed their name to " + newName);
+    console.log(users[index]);
+    io.emit('chat', "<p>" + user + " changed their name to " + newName + "</p>");
+  }
+}
+
+function changeUserColour(user, newColour){
+  var index = users.indexOf(user);
+  userID = userIDs[index];
+  if (isValidColor(newColour)){
+    userColours[index] = newColour
+    io.sockets.connected[usrID].emit('chat', "<p>Color changed successfully!</p>");
+    //Update user list with new colour
+  } else{
+    io.sockets.connected[usrID].emit('chat', "<p>Sorry. " + newColour + " is not a valid color</p>");
   }
 }
 
@@ -70,8 +98,9 @@ io.on('connection', function(socket){
   newName = newUser();
   usrID = socket.id;
   userIDs.push(usrID);
+  userColours.push(getRandomColor());
 
-  io.sockets.connected[usrID].emit('chat', "You are " + newName);
+  io.sockets.connected[usrID].emit('chat', "<p>You are " + newName + "</p>");
 
   displayLoggedMsg(usrID);
 
@@ -87,15 +116,25 @@ io.on('connection', function(socket){
     socID = socket.id;
     i = userIDs.indexOf(socID);
     user = users[i];
+    user_colour = userColours[i];
 
-    var fullMessage = currTime + ' ' + user + ' ' + msg;
+    console.log(users[i]);
+
+    name_coloured = user.fontcolor(user_colour);
+
+    var fullMessage = '<p>' + currTime + ' ' + name_coloured + ' ' + msg + '</p>';
 
     if (msg.split(" ")[0] == chgUser){
-      msgArr = msg.split(" ");
-      msgArr.shift();
-      newName = msgArr.join(" ");
+      umsgArr = msg.split(" ");
+      umsgArr.shift();
+      newName = umsgArr.join(" ");
       changeUserName(user, newName);
-    } else{
+    } else if (msg.split(" ")[0] == chgColour){
+      cmsgArr = msg.split(" ");
+      cmsgArr.shift();
+      newColour = cmsgArr.join(" ");
+      changeUserColour(user, newColour);
+    } else {
       logMessage(fullMessage);
       io.emit('chat', fullMessage);
     }

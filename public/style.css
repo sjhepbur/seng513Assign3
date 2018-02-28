@@ -33,7 +33,7 @@ body {
     height: 100%;
     overflow-y: auto;
     position: relative;
-    border: solid 1px grey;
+    /* border: solid 1px grey; */
     background-color: blue;
 }
 
@@ -44,7 +44,7 @@ body {
     height: 5%;
     width: 100%;
     /* overflow-y: auto; */
-    border: solid 1px black;
+    /* border: solid 1px black; */
 }
 
 #users_box {
