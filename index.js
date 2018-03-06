@@ -100,14 +100,20 @@ function displayLoggedMsg(usrID){
 //Function that changes a username
 function changeUserName(oldName, newName){
   var index = users.indexOf(oldName);
+  userID = userIDs[index];
   if (checkUserExists(newName)){
-    userID = userIDs[index];
-    io.sockets.connected[usrID].emit('chat', "<p>Sorry, " + newName + " is already a name on the server</p>");
+    io.sockets.connected[userID].emit('chat', "<p>Sorry, " + newName + " is already a name on the server</p>");
+  }else if(newName == ""){
+    io.sockets.connected[userID].emit('chat', "<p>Sorry, but you need a valid username</p>");
   } else{
     users[index] = newName;
+    user_colour = userColours[index];
     console.log(users[index]);
     io.emit('chat', "<p>" + user + " changed their name to " + newName + "</p>");
+    io.sockets.connected[userID].emit('disp', "<p>You are " + newName + "</p>");
+    io.emit('createCookie', newName, user_colour);
   }
+  resetUserList();
 }
 
 //Function that changes a users colour
@@ -117,10 +123,12 @@ function changeUserColour(user, newColour){
   if (isValidColor(newColour)){
     userColours[index] = newColour
     io.sockets.connected[usrID].emit('chat', "<p>Color changed successfully!</p>");
+    io.emit('createCookie', user, newColour);
     //Update user list with new colour
   } else{
     io.sockets.connected[usrID].emit('chat', "<p>Sorry. " + newColour + " is not a valid color</p>");
   }
+  resetUserList();
 }
 
 //Function to display all users in the Online Users box
@@ -133,6 +141,11 @@ function displayUsers(){
     console.log(name_coloured_msg);
     io.emit('dispUser', name_coloured_msg);
   }
+}
+
+function resetUserList(){
+  io.emit('clear');
+  displayUsers();
 }
 
 io.on('connection', function(socket){
@@ -184,8 +197,7 @@ io.on('connection', function(socket){
     }
 
     //Reset the Online User list to all current users
-    io.emit('clear');
-    displayUsers();
+    resetUserList();
     displayLoggedMsg(usrID);
   });
 
