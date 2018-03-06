@@ -1,30 +1,72 @@
+/* Handles all content in the chat application */
+
 * { 
-    margin: 0; padding: 0; box-sizing: border-box; 
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body { 
     font: 13px Helvetica, Arial; 
+    background-color: rgb(201, 201, 201);
 }
 
-#user_info {
-    width: 80%;
-    background-color: red;
-    height: 30px;
-    float: left;
-}
-
-#list_info {
-    width: 20%;
-    background-color: yellow;
-    height: 30px;
-    float: left;
-}
+/* Container for the chat application */
 
 #container {
     width: 90%;
     height: 90vh;
-    background-color: #ffffff;
+    background-color: rgb(155, 155, 155);
+    border-radius: 25px;
     margin: auto;
+}
+
+/* Handles the Online Users box and its contents */
+
+#users_box {
+    width: 20%;
+    float: left;
+    height: 100%;
+    padding: 10px;
+    overflow-y: auto;
+    position: relative;
+    background-color: rgb(70, 70, 70);
+    border: solid 10px rgb(155, 155, 155);
+}
+
+#users_content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    max-height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+
+#users { 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+}
+
+#users li { 
+    padding: 5px 10px; 
+}
+
+#list_info {
+    width: 20%;
+    background-color: rgb(155, 155, 155);
+    padding: 10px;
+    height: 30px;
+    float: left;
+}
+
+/* Handles the chat messages and the current users info*/
+#user_info {
+    width: 80%;
+    background-color: rgb(155, 155, 155);
+    padding: 10px;
+    height: 30px;
+    float: left;
 }
 
 #chat_box {
@@ -33,39 +75,41 @@ body {
     height: 100%;
     overflow-y: auto;
     position: relative;
-    /* border: solid 1px grey; */
-    background-color: blue;
+    color: white;
+    background-color: rgb(70, 70, 70);
+    border: solid 10px rgb(155, 155, 155);
 }
 
 #chat_content {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 5%;
+    max-height: 100%;
     width: 100%;
-    /* overflow-y: auto; */
-    /* border: solid 1px black; */
-}
-
-#users_box {
-    width: 20%;
-    float: left;
-    height: 100%;
     overflow-y: auto;
-    background-color: green;
 }
 
 #chat {
     width: 100%;
-    background-color: purple;
     height: 30px;
     float: left;
 }
 
+#messages { 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+}
+
+#messages li { 
+    padding: 5px 10px; 
+}
+
+/* Handles the chat button and user input */
+
 form { 
-    background: #000; 
+    background-color: rgb(155, 155, 155);
     padding: 3px; 
-    /* position: fixed;  */
     bottom: 0; 
     width: 100%; 
 }
@@ -83,32 +127,3 @@ form button {
     border: none; 
     padding: 10px; 
 }
-
-#messages { 
-    list-style-type: none; 
-    margin: 0; 
-    padding: 0; 
-}
-
-#messages li { 
-    padding: 5px 10px; 
-}
-
-#messages li:nth-child(odd) { 
-    background: #eee; 
-}
-
-/* #chat_div{
-    width:90%;
-    height:100%;
-    border:1px solid red;
-    margin-right:10px;
-    float:right;
-}
-#chat_div{
-    width:15%;
-    height:100%;
-    border:1px solid red;
-    margin-left:10px;
-    float:left;
-} */

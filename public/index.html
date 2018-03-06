@@ -5,22 +5,12 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <!-- <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-    <script
-       src="https://code.jquery.com/jquery-3.1.1.min.js"
-       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-       crossorigin="anonymous"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/client.js"></script> -->
     <div id="container">
       <div id="user_info">
-        <p>Username</p>
+        <p></p>
       </div>
       <div id="list_info">
-        <p>List of Users</p>
+        <p>Online Users:</p>
       </div>
     
       <div id="chat_box">
@@ -29,7 +19,9 @@
         </div>
       </div>
       <div id="users_box">
-        <p>User list here</p>
+        <div id="users_content">
+          <ul id="users"></ul>
+        </div>
       </div>
       
       <div id="chat">
